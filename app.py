@@ -28,7 +28,8 @@ def user_input_features():
             data[feat]=0
     return pd.DataFrame(data, index=[0])
 input_df=user_input_features()
-input_df['OverTime']=label_encoder.transform(input_df['OverTime'])
+#input_df['OverTime']=label_encoder.transform(input_df['OverTime'])
+input_df['OverTime']=input_df['OverTime'].map({'Yes':1, 'No':0})
 if st.button("Predict Attrition"):
     prediction=model.predict(input_df)
     if prediction[0]==1:
@@ -39,7 +40,7 @@ if st.button("Predict Probability"):
     proba=model.predict_proba(input_df)
     prediction_parabola=model.predict(input_df)
     st.subheader("Prediction Probability")
-    if prediction==1:
+    if prediction_parabola[0]==1:
         st.error("The employee is likely to leave the company.")
     else:
         st.success("The employee is likely to stay with the company.")
